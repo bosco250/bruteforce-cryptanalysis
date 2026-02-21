@@ -69,21 +69,20 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg-primary)' }}>
       <Header activeTab={activeTab} onTabChange={setActiveTab} />
       
-      <main className="flex-1 container mx-auto px-4 py-8">
+      <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
         <AnimatePresence mode="wait">
           {activeTab === 'decoder' ? (
             <motion.div
               key="decoder"
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.3 }}
+              exit={{ opacity: 0, x: 10 }}
+              transition={{ duration: 0.2 }}
             >
-              <div className="max-w-6xl mx-auto space-y-4">
-                {/* Input Section */}
+              <div className="max-w-4xl mx-auto space-y-4">
                 <CipherInput onAnalyze={handleAnalyze} loading={loading} />
                 
                 {/* Error Display */}
@@ -93,15 +92,22 @@ export default function Dashboard() {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="bg-error/10 border border-error/30 rounded-lg p-3 flex items-start gap-2"
+                      className="flex items-start gap-3 p-4 rounded-lg"
+                      style={{
+                        background: 'rgba(239, 68, 68, 0.1)',
+                        border: '1px solid rgba(239, 68, 68, 0.2)'
+                      }}
                     >
-                      <span className="text-lg">😕</span>
+                      <svg className="w-5 h-5 flex-shrink-0" style={{ color: 'var(--error)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
                       <div className="flex-1">
-                        <p className="text-error font-semibold text-sm">{error}</p>
+                        <p className="text-sm font-medium" style={{ color: 'var(--error)' }}>{error}</p>
                       </div>
                       <button
                         onClick={() => setError(null)}
-                        className="text-gray-400 hover:text-error transition-colors text-sm"
+                        className="text-sm transition-colors"
+                        style={{ color: 'var(--text-secondary)' }}
                       >
                         ✕
                       </button>
@@ -114,57 +120,57 @@ export default function Dashboard() {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="card p-8 text-center"
+                    className="card p-12 text-center"
                   >
                     <div className="flex flex-col items-center gap-3">
-                      <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin" />
-                      <p className="text-accent font-semibold">Decoding...</p>
+                      <div className="w-12 h-12 rounded-full border-4 border-t-transparent animate-spin"
+                        style={{ borderColor: 'var(--accent)', borderTopColor: 'transparent' }}
+                      />
+                      <p className="font-medium" style={{ color: 'var(--accent)' }}>Analyzing...</p>
                     </div>
                   </motion.div>
                 )}
 
-                {/* Confidence Scores */}
+                {/* Results */}
                 <AnimatePresence>
                   {results && !loading && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="flex flex-wrap items-center justify-between gap-3 bg-secondary/50 backdrop-blur-sm rounded-lg p-3 border border-gray-700"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div>
-                          <p className="text-gray-400 text-xs">Time</p>
-                          <p className="text-accent font-semibold text-sm">{analysisTime}s</p>
-                        </div>
-                        <div>
-                          <p className="text-gray-400 text-xs">Options</p>
-                          <p className="text-accent font-semibold text-sm">{results.length}</p>
-                        </div>
-                        <div>
-                          <p className="text-gray-400 text-xs">Best Match</p>
-                          <p className="text-success font-semibold text-sm">
-                            {(results[0].score * 100).toFixed(0)}%
-                          </p>
-                        </div>
-                      </div>
-                      
-                      <button
-                        onClick={handleExportJSON}
-                        className="btn-secondary text-xs py-2 px-3"
+                    <>
+                      {/* Stats Bar */}
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="card p-4"
                       >
-                        <span className="flex items-center gap-1">
-                          <span>💾</span>
-                          <span>Save</span>
-                        </span>
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                        <div className="flex flex-wrap items-center justify-between gap-4">
+                          <div className="flex items-center gap-6">
+                            <div>
+                              <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Time</p>
+                              <p className="text-sm font-bold" style={{ color: 'var(--accent)' }}>{analysisTime}s</p>
+                            </div>
+                            <div>
+                              <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Options</p>
+                              <p className="text-sm font-bold" style={{ color: 'var(--accent)' }}>{results.length}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Best Match</p>
+                              <p className="text-sm font-bold" style={{ color: 'var(--success)' }}>
+                                {(results[0].score * 100).toFixed(0)}%
+                              </p>
+                            </div>
+                          </div>
+                          
+                          <button
+                            onClick={handleExportJSON}
+                            className="btn-secondary text-xs px-4 py-2"
+                          >
+                            💾 Export
+                          </button>
+                        </div>
+                      </motion.div>
 
-                {/* Results Table */}
-                <AnimatePresence>
-                  {results && !loading && (
-                    <ResultTable results={results} />
+                      {/* Results Table */}
+                      <ResultTable results={results} />
+                    </>
                   )}
                 </AnimatePresence>
               </div>
@@ -172,10 +178,10 @@ export default function Dashboard() {
           ) : (
             <motion.div
               key="encoder"
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.2 }}
             >
               <CipherEncoder />
             </motion.div>
@@ -184,25 +190,20 @@ export default function Dashboard() {
       </main>
       
       {/* Footer */}
-      <footer className="border-t py-6 mt-12" style={{
-        background: theme === 'dark' 
-          ? 'rgba(30, 41, 59, 0.3)' 
-          : 'rgba(255, 255, 255, 0.8)',
-        borderColor: theme === 'dark'
-          ? 'rgba(34, 211, 238, 0.1)'
-          : 'rgba(8, 145, 178, 0.2)',
-        backdropFilter: 'blur(10px)'
+      <footer className="border-t py-4 mt-auto" style={{
+        background: 'var(--bg-secondary)',
+        borderColor: 'var(--border)'
       }}>
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-            <p style={{ color: 'var(--text-primary)' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-2 text-xs">
+            <p style={{ color: 'var(--text-secondary)' }}>
               Powered by <span style={{ color: 'var(--accent)', fontWeight: '600' }}>Bosco Dev</span>
             </p>
-            <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4" style={{ color: 'var(--text-secondary)' }}>
-              <span>Level 4 Computer Science</span>
-              <span className="hidden md:inline">•</span>
+            <div className="flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
+              <span>Level 4 CS</span>
+              <span>•</span>
               <span>University of Rwanda</span>
-              <span className="hidden md:inline">•</span>
+              <span>•</span>
               <span>{new Date().getFullYear()}</span>
             </div>
           </div>

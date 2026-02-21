@@ -5,7 +5,6 @@ import { copyToClipboard, formatScore, truncateText, downloadAsFile } from '../u
 export default function ResultTable({ results }) {
   const [copiedIndex, setCopiedIndex] = useState(null);
   const [showAll, setShowAll] = useState(false);
-  const [expandedIndex, setExpandedIndex] = useState(null);
 
   const handleCopy = async (text, index) => {
     const success = await copyToClipboard(text);
@@ -16,86 +15,78 @@ export default function ResultTable({ results }) {
   };
 
   const handleDownload = (text, shift) => {
-    downloadAsFile(text, `decoded-message-${shift}.txt`);
+    downloadAsFile(text, `decoded-shift-${shift}.txt`);
   };
 
-  const toggleExpand = (index) => {
-    setExpandedIndex(expandedIndex === index ? null : index);
-  };
+  const displayResults = showAll ? results : results.slice(0, 8);
 
-  const displayResults = showAll ? results : results.slice(0, 5);
-
-  const getScoreColor = (score) => {
-    if (score > 0.7) return 'text-success';
-    if (score > 0.4) return 'text-warning';
-    return 'text-gray-400';
-  };
-
-  const getScoreGradient = (score) => {
-    if (score > 0.7) return 'from-success to-accent';
-    if (score > 0.4) return 'from-warning to-accent';
-    return 'from-gray-500 to-gray-600';
-  };
-
-  const getConfidenceLabel = (score) => {
-    if (score > 0.7) return 'Very Likely';
-    if (score > 0.4) return 'Possible';
-    return 'Unlikely';
+  const getConfidenceBadge = (score) => {
+    if (score > 0.7) return { class: 'badge-success', label: 'High' };
+    if (score > 0.4) return { class: 'badge-warning', label: 'Medium' };
+    return { class: 'badge-info', label: 'Low' };
   };
 
   return (
     <motion.div
-      initial={{ y: 50, opacity: 0 }}
+      initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.4, delay: 0.2 }}
-      className="card p-6 md:p-8"
+      transition={{ duration: 0.3 }}
+      className="card p-5"
     >
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <div>
-          <h2 className="text-2xl font-semibold text-accent flex items-center gap-2">
-            <span>🎯</span>
-            Your Decoded Messages
-          </h2>
-          <p className="text-gray-400 text-sm mt-1">
-            Found {results.length} possible messages • Sorted by confidence
-          </p>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-lg"
+            style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)' }}
+          >
+            🎯
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+              Decoded Results
+            </h2>
+            <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+              {results.length} possibilities found
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Best Match Highlight */}
+      {/* Best Match Card */}
       {results[0] && (
         <motion.div
-          initial={{ scale: 0.95, opacity: 0 }}
+          initial={{ scale: 0.98, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-gradient-to-r from-highlight/20 to-accent/20 border border-highlight/40 rounded-lg p-5 mb-6"
+          className="p-4 rounded-lg mb-4"
+          style={{
+            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
+            border: '1px solid rgba(99, 102, 241, 0.3)'
+          }}
         >
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex-1">
-              <p className="text-highlight font-semibold mb-2 flex items-center gap-2">
-                <span className="text-xl">✨</span>
-                Most Likely Message
-              </p>
-              <p className="text-gray-100 font-mono text-sm md:text-base break-words leading-relaxed">
-                {results[0].text}
-              </p>
-              <div className="flex flex-wrap items-center gap-4 mt-3">
-                <span className={`text-sm font-semibold ${getScoreColor(results[0].score)}`}>
-                  {getConfidenceLabel(results[0].score)} ({formatScore(results[0].score)}% match)
-                </span>
-              </div>
+          <div className="flex items-start justify-between gap-3 mb-2">
+            <span className="badge badge-success">Best Match</span>
+            <span className="text-sm font-bold" style={{ color: 'var(--success)' }}>
+              {formatScore(results[0].score)}%
+            </span>
+          </div>
+          <p className="font-mono text-sm break-words mb-3" style={{ color: 'var(--text-primary)' }}>
+            {results[0].text}
+          </p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3 text-xs" style={{ color: 'var(--text-secondary)' }}>
+              <span>Shift: {results[0].shift}</span>
+              <span>•</span>
+              <span>{results[0].detectedLanguage || 'Auto'}</span>
             </div>
             <div className="flex gap-2">
               <button
                 onClick={() => handleCopy(results[0].text, -1)}
-                className="text-accent hover:text-highlight transition-colors p-2"
-                title="Copy to clipboard"
+                className="btn-secondary text-xs px-3 py-1"
               >
-                {copiedIndex === -1 ? '✅' : '📋'}
+                {copiedIndex === -1 ? '✓' : '📋'}
               </button>
               <button
                 onClick={() => handleDownload(results[0].text, results[0].shift)}
-                className="text-accent hover:text-highlight transition-colors p-2"
-                title="Download as file"
+                className="btn-secondary text-xs px-3 py-1"
               >
                 💾
               </button>
@@ -104,116 +95,82 @@ export default function ResultTable({ results }) {
         </motion.div>
       )}
 
-      {/* Alternative Results */}
-      <div className="mb-4">
-        <h3 className="text-lg font-semibold text-gray-300 mb-3">Other Possibilities</h3>
-      </div>
-
-      {/* Results Table */}
-      <div className="overflow-x-auto scrollbar-thin">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-accent/20">
-              <th className="table-header">#</th>
-              <th className="table-header">Decoded Text</th>
-              <th className="table-header">Match</th>
-              <th className="table-header">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <AnimatePresence>
-              {displayResults.map((result, index) => (
-                <motion.tr
-                  key={result.shift}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  transition={{ delay: index * 0.03 }}
-                  className="table-row"
-                >
-                  <td className="py-3 px-4">
-                    <span className={`font-bold ${index === 0 ? 'text-highlight' : 'text-gray-400'}`}>
-                      {index + 1}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4">
-                    <div>
-                      <p className="text-gray-200 font-mono text-xs md:text-sm break-words">
-                        {expandedIndex === index ? result.text : truncateText(result.text, 80)}
-                      </p>
-                      {result.text.length > 80 && (
-                        <button
-                          onClick={() => toggleExpand(index)}
-                          className="text-accent hover:text-highlight text-xs mt-1 transition-colors"
-                        >
-                          {expandedIndex === index ? '▲ Show less' : '▼ Show more'}
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                  <td className="py-3 px-4">
-                    <div className="flex flex-col gap-2">
+      {/* Other Results */}
+      <div className="space-y-2">
+        <AnimatePresence>
+          {displayResults.slice(1).map((result, index) => {
+            const actualIndex = index + 1;
+            const badge = getConfidenceBadge(result.score);
+            
+            return (
+              <motion.div
+                key={result.shift}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 10 }}
+                transition={{ delay: index * 0.02 }}
+                className="p-3 rounded-lg transition-all hover:scale-[1.01]"
+                style={{
+                  background: 'var(--bg-secondary)',
+                  border: '1px solid var(--border)'
+                }}
+              >
+                <div className="flex items-start gap-3">
+                  <span className="text-xs font-bold w-6 text-center" style={{ color: 'var(--text-secondary)' }}>
+                    #{actualIndex + 1}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-mono text-xs break-words mb-2" style={{ color: 'var(--text-primary)' }}>
+                      {truncateText(result.text, 100)}
+                    </p>
+                    <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <div className="w-16 md:w-24 bg-gray-700 rounded-full h-2">
-                          <div
-                            className={`bg-gradient-to-r ${getScoreGradient(result.score)} h-2 rounded-full transition-all duration-500`}
-                            style={{ width: `${result.score * 100}%` }}
-                          />
-                        </div>
-                        <span className={`text-xs md:text-sm font-semibold ${getScoreColor(result.score)}`}>
+                        <span className={`badge ${badge.class}`}>{badge.label}</span>
+                        <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>
                           {formatScore(result.score)}%
                         </span>
                       </div>
-                      <span className="text-xs text-gray-500">
-                        {getConfidenceLabel(result.score)}
-                      </span>
+                      <div className="flex gap-1">
+                        <button
+                          onClick={() => handleCopy(result.text, actualIndex)}
+                          className="w-7 h-7 rounded flex items-center justify-center transition-all hover:scale-110"
+                          style={{ 
+                            background: 'var(--bg-card)',
+                            color: 'var(--accent)'
+                          }}
+                          title="Copy"
+                        >
+                          {copiedIndex === actualIndex ? '✓' : '📋'}
+                        </button>
+                        <button
+                          onClick={() => handleDownload(result.text, result.shift)}
+                          className="w-7 h-7 rounded flex items-center justify-center transition-all hover:scale-110"
+                          style={{ 
+                            background: 'var(--bg-card)',
+                            color: 'var(--accent)'
+                          }}
+                          title="Download"
+                        >
+                          💾
+                        </button>
+                      </div>
                     </div>
-                  </td>
-                  <td className="py-3 px-4">
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => handleCopy(result.text, index)}
-                        className="text-accent hover:text-highlight transition-colors text-xs md:text-sm p-1"
-                        title="Copy"
-                      >
-                        {copiedIndex === index ? '✅' : '📋'}
-                      </button>
-                      <button
-                        onClick={() => handleDownload(result.text, result.shift)}
-                        className="text-accent hover:text-highlight transition-colors text-xs md:text-sm p-1"
-                        title="Download"
-                      >
-                        💾
-                      </button>
-                    </div>
-                  </td>
-                </motion.tr>
-              ))}
-            </AnimatePresence>
-          </tbody>
-        </table>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
       </div>
 
-      {/* Show More/Less Button */}
-      {results.length > 5 && (
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+      {/* Show More Button */}
+      {results.length > 8 && (
+        <button
           onClick={() => setShowAll(!showAll)}
-          className="mt-6 w-full btn-secondary"
+          className="btn-secondary w-full mt-4 text-sm"
         >
-          {showAll ? (
-            <span className="flex items-center justify-center gap-2">
-              <span>▲</span>
-              <span>Show Top Results Only</span>
-            </span>
-          ) : (
-            <span className="flex items-center justify-center gap-2">
-              <span>▼</span>
-              <span>See All {results.length} Possibilities</span>
-            </span>
-          )}
-        </motion.button>
+          {showAll ? '▲ Show Less' : `▼ Show All ${results.length} Results`}
+        </button>
       )}
     </motion.div>
   );

@@ -6,90 +6,133 @@ export default function Header({ activeTab, onTabChange }) {
 
   return (
     <motion.header 
-      initial={{ y: -50, opacity: 0 }}
+      initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="backdrop-blur-md border-b sticky top-0 z-50"
+      transition={{ duration: 0.4 }}
+      className="sticky top-0 z-50 backdrop-blur-xl border-b"
       style={{
         background: theme === 'dark' 
-          ? 'rgba(30, 41, 59, 0.5)' 
-          : 'rgba(255, 255, 255, 0.8)',
-        borderColor: theme === 'dark'
-          ? 'rgba(34, 211, 238, 0.2)'
-          : 'rgba(8, 145, 178, 0.2)'
+          ? 'rgba(10, 14, 39, 0.95)' 
+          : 'rgba(248, 250, 252, 0.95)',
+        borderColor: 'var(--border)'
       }}
     >
-      <div className="container mx-auto px-4 py-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gradient flex items-center gap-3">
-              <span className="text-4xl md:text-5xl">🔓</span>
-              Cipher Tool
-            </h1>
-            <p className="mt-2 text-sm md:text-base" style={{ color: 'var(--text-secondary)' }}>
-              Encode and decode messages with smart analysis
-            </p>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            {/* Theme Toggle */}
-            <button
-              onClick={toggleTheme}
-              className="p-3 rounded-lg transition-all hover:scale-110 flex items-center justify-center"
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-14 sm:h-16">
+          {/* Logo */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-xl sm:text-2xl"
               style={{
-                background: theme === 'dark' 
-                  ? 'rgba(30, 41, 59, 0.8)' 
-                  : 'rgba(241, 245, 249, 0.8)',
-                border: `1px solid ${theme === 'dark' ? 'rgba(34, 211, 238, 0.3)' : 'rgba(8, 145, 178, 0.3)'}`
+                background: 'linear-gradient(135deg, var(--accent) 0%, var(--highlight) 100%)',
               }}
-              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
-              {theme === 'dark' ? (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" style={{ color: 'var(--accent)' }}>
-                  <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
-                </svg>
-              ) : (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" style={{ color: 'var(--accent)' }}>
-                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                </svg>
-              )}
-            </button>
+              🔐
+            </div>
+            <div>
+              <h1 className="text-base sm:text-xl font-bold text-gradient">CipherPro</h1>
+              <p className="text-[10px] sm:text-xs hidden xs:block" style={{ color: 'var(--text-secondary)' }}>
+                Smart Cryptanalysis
+              </p>
+            </div>
+          </div>
 
-            {/* Tab Navigation */}
-            <div className="flex gap-2 p-1 rounded-lg" style={{
-              background: theme === 'dark' 
-                ? 'rgba(15, 23, 42, 0.5)' 
-                : 'rgba(241, 245, 249, 0.8)',
-              border: `1px solid ${theme === 'dark' ? 'rgba(34, 211, 238, 0.2)' : 'rgba(8, 145, 178, 0.2)'}`
-            }}>
+          {/* Navigation & Controls */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Tab Switcher - Desktop */}
+            <div className="hidden md:flex items-center gap-1 p-1 rounded-lg"
+              style={{
+                background: 'var(--bg-secondary)',
+                border: '1px solid var(--border)'
+              }}
+            >
               <button
                 onClick={() => onTabChange('decoder')}
-                className={`px-6 py-2 rounded-md font-semibold transition-all ${
-                  activeTab === 'decoder'
-                    ? 'btn-primary'
-                    : ''
+                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
+                  activeTab === 'decoder' ? 'shadow-md' : ''
                 }`}
-                style={activeTab !== 'decoder' ? {
+                style={activeTab === 'decoder' ? {
+                  background: 'linear-gradient(135deg, var(--accent) 0%, var(--highlight) 100%)',
+                  color: 'white'
+                } : {
                   color: 'var(--text-secondary)'
-                } : {}}
+                }}
               >
-                🔍 Decoder
+                Decoder
               </button>
               <button
                 onClick={() => onTabChange('encoder')}
-                className={`px-6 py-2 rounded-md font-semibold transition-all ${
-                  activeTab === 'encoder'
-                    ? 'btn-primary'
-                    : ''
+                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
+                  activeTab === 'encoder' ? 'shadow-md' : ''
                 }`}
-                style={activeTab !== 'encoder' ? {
+                style={activeTab === 'encoder' ? {
+                  background: 'linear-gradient(135deg, var(--accent) 0%, var(--highlight) 100%)',
+                  color: 'white'
+                } : {
                   color: 'var(--text-secondary)'
-                } : {}}
+                }}
               >
-                🔒 Encoder
+                Encoder
               </button>
             </div>
+
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center transition-all hover:scale-110"
+              style={{
+                background: 'var(--bg-secondary)',
+                border: '1px solid var(--border)',
+                color: 'var(--accent)'
+              }}
+              title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+            >
+              {theme === 'dark' ? (
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              )}
+            </button>
           </div>
+        </div>
+
+        {/* Mobile Tab Switcher */}
+        <div className="md:hidden pb-2 flex gap-2">
+          <button
+            onClick={() => onTabChange('decoder')}
+            className={`flex-1 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
+              activeTab === 'decoder' ? 'shadow-md' : ''
+            }`}
+            style={activeTab === 'decoder' ? {
+              background: 'linear-gradient(135deg, var(--accent) 0%, var(--highlight) 100%)',
+              color: 'white'
+            } : {
+              background: 'var(--bg-secondary)',
+              color: 'var(--text-secondary)',
+              border: '1px solid var(--border)'
+            }}
+          >
+            🔍 Decoder
+          </button>
+          <button
+            onClick={() => onTabChange('encoder')}
+            className={`flex-1 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
+              activeTab === 'encoder' ? 'shadow-md' : ''
+            }`}
+            style={activeTab === 'encoder' ? {
+              background: 'linear-gradient(135deg, var(--accent) 0%, var(--highlight) 100%)',
+              color: 'white'
+            } : {
+              background: 'var(--bg-secondary)',
+              color: 'var(--text-secondary)',
+              border: '1px solid var(--border)'
+            }}
+          >
+            🔒 Encoder
+          </button>
         </div>
       </div>
     </motion.header>
