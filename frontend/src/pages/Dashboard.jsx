@@ -72,7 +72,7 @@ export default function Dashboard() {
     <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg-primary)' }}>
       <Header activeTab={activeTab} onTabChange={setActiveTab} />
       
-      <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
+      <main className="flex-1 px-3 py-4 sm:px-6 sm:py-6 lg:px-8">
         <AnimatePresence mode="wait">
           {activeTab === 'decoder' ? (
             <motion.div
@@ -82,7 +82,7 @@ export default function Dashboard() {
               exit={{ opacity: 0, x: 10 }}
               transition={{ duration: 0.2 }}
             >
-              <div className="max-w-4xl mx-auto space-y-4">
+              <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4">
                 <CipherInput onAnalyze={handleAnalyze} loading={loading} />
                 
                 {/* Error Display */}
@@ -92,21 +92,21 @@ export default function Dashboard() {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="flex items-start gap-3 p-4 rounded-lg"
+                      className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg text-xs sm:text-sm"
                       style={{
                         background: 'rgba(239, 68, 68, 0.1)',
                         border: '1px solid rgba(239, 68, 68, 0.2)'
                       }}
                     >
-                      <svg className="w-5 h-5 flex-shrink-0" style={{ color: 'var(--error)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: 'var(--error)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                       <div className="flex-1">
-                        <p className="text-sm font-medium" style={{ color: 'var(--error)' }}>{error}</p>
+                        <p className="font-medium" style={{ color: 'var(--error)' }}>{error}</p>
                       </div>
                       <button
                         onClick={() => setError(null)}
-                        className="text-sm transition-colors"
+                        className="text-xs sm:text-sm transition-colors"
                         style={{ color: 'var(--text-secondary)' }}
                       >
                         ✕
@@ -120,13 +120,13 @@ export default function Dashboard() {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="card p-12 text-center"
+                    className="card p-8 sm:p-12 text-center"
                   >
                     <div className="flex flex-col items-center gap-3">
-                      <div className="w-12 h-12 rounded-full border-4 border-t-transparent animate-spin"
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-4 border-t-transparent animate-spin"
                         style={{ borderColor: 'var(--accent)', borderTopColor: 'transparent' }}
                       />
-                      <p className="font-medium" style={{ color: 'var(--accent)' }}>Analyzing...</p>
+                      <p className="text-sm sm:text-base font-medium" style={{ color: 'var(--accent)' }}>Analyzing...</p>
                     </div>
                   </motion.div>
                 )}
@@ -139,21 +139,21 @@ export default function Dashboard() {
                       <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="card p-4"
+                        className="card p-3 sm:p-4"
                       >
-                        <div className="flex flex-wrap items-center justify-between gap-4">
-                          <div className="flex items-center gap-6">
+                        <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4">
+                          <div className="flex items-center gap-3 sm:gap-6">
                             <div>
-                              <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Time</p>
-                              <p className="text-sm font-bold" style={{ color: 'var(--accent)' }}>{analysisTime}s</p>
+                              <p className="text-xs sm:text-sm" style={{ color: 'var(--text-secondary)' }}>Time</p>
+                              <p className="text-sm sm:text-base font-bold" style={{ color: 'var(--accent)' }}>{analysisTime}s</p>
                             </div>
                             <div>
-                              <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Options</p>
-                              <p className="text-sm font-bold" style={{ color: 'var(--accent)' }}>{results.length}</p>
+                              <p className="text-xs sm:text-sm" style={{ color: 'var(--text-secondary)' }}>Options</p>
+                              <p className="text-sm sm:text-base font-bold" style={{ color: 'var(--accent)' }}>{results.length}</p>
                             </div>
                             <div>
-                              <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Best Match</p>
-                              <p className="text-sm font-bold" style={{ color: 'var(--success)' }}>
+                              <p className="text-xs sm:text-sm" style={{ color: 'var(--text-secondary)' }}>Best</p>
+                              <p className="text-sm sm:text-base font-bold" style={{ color: 'var(--success)' }}>
                                 {(results[0].score * 100).toFixed(0)}%
                               </p>
                             </div>
@@ -161,7 +161,7 @@ export default function Dashboard() {
                           
                           <button
                             onClick={handleExportJSON}
-                            className="btn-secondary text-xs px-4 py-2"
+                            className="btn-secondary text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2"
                           >
                             💾 Export
                           </button>
@@ -190,19 +190,21 @@ export default function Dashboard() {
       </main>
       
       {/* Footer */}
-      <footer className="border-t py-4 mt-auto" style={{
+      <footer className="border-t py-3 sm:py-4 mt-auto" style={{
         background: 'var(--bg-secondary)',
         borderColor: 'var(--border)'
       }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-2 text-xs">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-1 sm:gap-2 text-xs sm:text-sm">
             <p style={{ color: 'var(--text-secondary)' }}>
               Powered by <span style={{ color: 'var(--accent)', fontWeight: '600' }}>Bosco Dev</span>
             </p>
-            <div className="flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
-              <span>Level 4 CS</span>
+            <div className="flex items-center gap-1 sm:gap-2" style={{ color: 'var(--text-secondary)' }}>
+              <span className="hidden xs:inline">Level 4 CS</span>
+              <span className="xs:hidden">L4 CS</span>
               <span>•</span>
-              <span>University of Rwanda</span>
+              <span className="hidden xs:inline">University of Rwanda</span>
+              <span className="xs:hidden">UR</span>
               <span>•</span>
               <span>{new Date().getFullYear()}</span>
             </div>
