@@ -1,0 +1,68 @@
+### Test API Endpoints
+### Use with VS Code REST Client extension or copy to Postman
+
+### Variables
+@baseUrl = http://localhost:5000
+@prodUrl = https://your-project-name.vercel.app
+
+### ============================================
+### LOCAL TESTING
+### ============================================
+
+### 1. Health Check (Local)
+GET {{baseUrl}}/health
+
+### 2. Root Endpoint (Local)
+GET {{baseUrl}}/
+
+### 3. Decode Simple Text (Local)
+POST {{baseUrl}}/api/brute
+Content-Type: application/json
+
+{
+  "ciphertext": "Khoor Zruog",
+  "language": "auto"
+}
+
+### 4. Decode Long Text (Local)
+POST {{baseUrl}}/api/brute
+Content-Type: application/json
+
+{
+  "ciphertext": "Wklv lv d whvw phvvdjh iru fubswdqdobvlv",
+  "language": "auto"
+}
+
+### 5. Decode Kinyarwanda (Local)
+POST {{baseUrl}}/api/brute
+Content-Type: application/json
+
+{
+  "ciphertext": "Ltrzmyd",
+  "language": "auto"
+}
+
+### ============================================
+### PRODUCTION TESTING (After Vercel Deploy)
+### ============================================
+
+### 6. Health Check (Production)
+GET {{prodUrl}}/health
+
+### 7. Decode Simple Text (Production)
+POST {{prodUrl}}/api/brute
+Content-Type: application/json
+
+{
+  "ciphertext": "Khoor Zruog",
+  "language": "auto"
+}
+
+### 8. Decode Long Text (Production)
+POST {{prodUrl}}/api/brute
+Content-Type: application/json
+
+{
+  "ciphertext": "Wklv lv d whvw phvvdjh iru fubswdqdobvlv",
+  "language": "auto"
+}
