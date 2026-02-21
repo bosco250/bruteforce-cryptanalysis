@@ -1,0 +1,231 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-card: #1e293b;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent: #22d3ee;
+    --highlight: #a78bfa;
+    --border-color: rgba(34, 211, 238, 0.2);
+  }
+
+  .light {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f1f5f9;
+    --bg-card: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --accent: #0891b2;
+    --highlight: #7c3aed;
+    --border-color: rgba(8, 145, 178, 0.3);
+  }
+
+  body {
+    @apply antialiased min-h-screen;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    color: var(--text-primary);
+  }
+
+  .light body {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  }
+}
+
+@layer components {
+  .card {
+    @apply backdrop-blur-sm rounded-xl shadow-2xl;
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid var(--border-color);
+  }
+
+  .light .card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .btn-primary {
+    @apply font-semibold py-3 px-6 rounded-lg;
+    @apply hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply transition-all duration-200;
+    background: linear-gradient(to right, var(--accent), var(--highlight));
+    color: #ffffff;
+  }
+
+  .light .btn-primary {
+    color: #ffffff;
+  }
+  
+  .btn-secondary {
+    @apply font-semibold py-3 px-6 rounded-lg;
+    @apply hover:bg-opacity-80 active:scale-95 disabled:opacity-50;
+    @apply transition-all duration-200;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--accent);
+  }
+
+  .light .btn-secondary {
+    background: rgba(241, 245, 249, 0.8);
+    border: 1px solid var(--border-color);
+  }
+  
+  .input-field {
+    @apply w-full rounded-lg p-4;
+    @apply focus:outline-none focus:ring-2;
+    @apply transition-all duration-200;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+  }
+
+  .input-field::placeholder {
+    color: var(--text-secondary);
+  }
+
+  .light .input-field {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+  }
+
+  .light .input-field:focus {
+    ring-color: var(--accent);
+  }
+  
+  .table-header {
+    @apply text-left py-3 px-4 font-semibold text-sm uppercase tracking-wider;
+    color: var(--accent);
+  }
+  
+  .table-row {
+    @apply transition-colors;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .table-row:hover {
+    background: rgba(15, 23, 42, 0.5);
+  }
+
+  .light .table-row {
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  }
+
+  .light .table-row:hover {
+    background: rgba(241, 245, 249, 0.8);
+  }
+
+  /* Text colors for light mode */
+  .light .text-gray-100,
+  .light .text-gray-200 {
+    color: var(--text-primary) !important;
+  }
+
+  .light .text-gray-300 {
+    color: #334155 !important;
+  }
+
+  .light .text-gray-400,
+  .light .text-gray-500 {
+    color: var(--text-secondary) !important;
+  }
+
+  .light .text-error {
+    color: #dc2626 !important;
+  }
+
+  .light .text-success {
+    color: #059669 !important;
+  }
+
+  .light .text-warning {
+    color: #d97706 !important;
+  }
+
+  .light .bg-error\/10 {
+    background: rgba(239, 68, 68, 0.1) !important;
+  }
+
+  .light .border-error\/30 {
+    border-color: rgba(239, 68, 68, 0.3) !important;
+  }
+
+  .light .bg-highlight\/10 {
+    background: rgba(124, 58, 237, 0.1) !important;
+  }
+
+  .light .border-highlight\/30,
+  .light .border-highlight\/40 {
+    border-color: rgba(124, 58, 237, 0.3) !important;
+  }
+
+  .light .bg-primary\/50 {
+    background: rgba(241, 245, 249, 0.8) !important;
+  }
+
+  .light .border-accent\/10,
+  .light .border-accent\/20 {
+    border-color: var(--border-color) !important;
+  }
+
+  /* Card inner backgrounds */
+  .light .bg-primary-light\/50 {
+    background: rgba(241, 245, 249, 0.8) !important;
+  }
+
+  .light .bg-secondary\/50 {
+    background: rgba(226, 232, 240, 0.8) !important;
+  }
+
+  .light .border-gray-700 {
+    border-color: rgba(203, 213, 225, 0.8) !important;
+  }
+
+  .light .bg-primary-light {
+    background: rgba(241, 245, 249, 0.6) !important;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply text-transparent bg-clip-text;
+    background-image: linear-gradient(to right, var(--accent), var(--highlight));
+  }
+  
+  .glow {
+    text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+  }
+
+  .light .glow {
+    text-shadow: 0 0 10px rgba(8, 145, 178, 0.3);
+  }
+  
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 4px;
+  }
+
+  .light .scrollbar-thin::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+
+  .light .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: var(--accent);
+  }
+}
