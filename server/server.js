@@ -7,8 +7,8 @@ import { rateLimit } from 'express-rate-limit';
 import bruteRoutes from './routes/bruteRoutes.js';
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-const NODE_ENV = process.env.NODE_ENV || 'development';
+const PORT = 5000;
+const NODE_ENV = process.env.VERCEL ? 'production' : 'development';
 
 // Security middleware
 app.use(helmet({
@@ -18,13 +18,12 @@ app.use(helmet({
 // Compression middleware
 app.use(compression());
 
-// CORS configuration
-const corsOptions = {
-  origin: process.env.CLIENT_URL || ['http://localhost:5173', 'http://localhost:3000'],
+// CORS configuration - allow all origins for simplicity
+app.use(cors({
+  origin: '*',
   credentials: true,
   optionsSuccessStatus: 200
-};
-app.use(cors(corsOptions));
+}));
 
 // Rate limiting
 const limiter = rateLimit({
@@ -109,20 +108,23 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server');
-  server.close(() => {
-    console.log('HTTP server closed');
+// Start server only in development (not on Vercel)
+if (NODE_ENV !== 'production' || !process.env.VERCEL) {
+  const server = app.listen(PORT, () => {
+    console.log('\n🚀 ================================');
+    console.log(`   Server running on port ${PORT}`);
+    console.log(`   Environment: ${NODE_ENV}`);
+    console.log(`   URL: http://localhost:${PORT}`);
+    console.log('   ================================\n');
   });
-});
 
-const server = app.listen(PORT, () => {
-  console.log('\n🚀 ================================');
-  console.log(`   Server running on port ${PORT}`);
-  console.log(`   Environment: ${NODE_ENV}`);
-  console.log(`   URL: http://localhost:${PORT}`);
-  console.log('   ================================\n');
-});
+  // Graceful shutdown
+  process.on('SIGTERM', () => {
+    console.log('SIGTERM signal received: closing HTTP server');
+    server.close(() => {
+      console.log('HTTP server closed');
+    });
+  });
+}
 
 export default app;

@@ -33,13 +33,15 @@ A professional web-based cryptanalysis tool for decoding shift cipher encrypted 
 
 ## 🚀 Installation
 
+### Local Development
+
 1. Clone the repository:
 ```bash
 git clone https://github.com/bosco250/bruteforce-cryptanalysis.git
 cd bruteforce-cryptanalysis
 ```
 
-2. Install dependencies for both frontend and backend:
+2. Install dependencies:
 ```bash
 # Install frontend dependencies
 cd frontend
@@ -48,19 +50,6 @@ npm install
 # Install backend dependencies
 cd ../server
 npm install
-```
-
-3. Set up environment variables:
-
-Create `.env` file in the `server` directory:
-```env
-PORT=5000
-NODE_ENV=development
-```
-
-Create `.env` file in the `frontend` directory:
-```env
-VITE_API_URL=http://localhost:5000
 ```
 
 ## 🎮 Usage
@@ -82,6 +71,37 @@ npm run dev
 ```
 
 The frontend will run on `http://localhost:5173`
+
+## 🌐 Deploy to Vercel
+
+### Quick Deploy Steps
+
+1. **Push to GitHub**:
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/bosco250/bruteforce-cryptanalysis.git
+git branch -M main
+git push -u origin main
+```
+
+2. **Deploy on Vercel**:
+   - Go to [vercel.com](https://vercel.com) and sign in
+   - Click "Add New Project"
+   - Import your GitHub repository
+   - Vercel will auto-detect the configuration
+   - Click "Deploy"
+
+3. **Done!** Your app will be live at `https://your-project.vercel.app`
+
+### Features on Vercel
+
+✅ Frontend and Backend deployed together
+✅ Automatic HTTPS
+✅ Global CDN
+✅ Serverless functions for backend
+✅ Zero configuration needed
 
 ## 📖 How It Works
 
