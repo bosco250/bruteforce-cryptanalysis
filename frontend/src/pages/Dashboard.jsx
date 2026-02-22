@@ -16,6 +16,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [analysisTime, setAnalysisTime] = useState(null);
+  const [showTeamModal, setShowTeamModal] = useState(false);
 
   // Check backend health on mount
   useEffect(() => {
@@ -197,7 +198,14 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-1 sm:gap-2 text-xs sm:text-sm">
             <p style={{ color: 'var(--text-secondary)' }}>
-              Powered by <span style={{ color: 'var(--accent)', fontWeight: '600' }}>Bosco Dev</span>
+              Developed by{' '}
+              <button
+                onClick={() => setShowTeamModal(true)}
+                className="font-semibold hover:underline transition-all"
+                style={{ color: 'var(--accent)' }}
+              >
+                Group 6
+              </button>
             </p>
             <div className="flex items-center gap-1 sm:gap-2" style={{ color: 'var(--text-secondary)' }}>
               <span className="hidden xs:inline">Level 4 CS</span>
@@ -211,6 +219,116 @@ export default function Dashboard() {
           </div>
         </div>
       </footer>
+
+      {/* Team Modal */}
+      <AnimatePresence>
+        {showTeamModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            style={{ background: 'rgba(0, 0, 0, 0.7)' }}
+            onClick={() => setShowTeamModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: 'spring', duration: 0.3 }}
+              className="card max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="flex items-center justify-between p-4 sm:p-6 border-b" style={{ borderColor: 'var(--border)' }}>
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
+                    Group 6 Team Members
+                  </h2>
+                  <p className="text-xs sm:text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
+                    Level 4 Computer Science - University of Rwanda
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowTeamModal(false)}
+                  className="text-2xl sm:text-3xl leading-none transition-colors hover:opacity-70"
+                  style={{ color: 'var(--text-secondary)' }}
+                >
+                  ×
+                </button>
+              </div>
+
+              {/* Team Members List */}
+              <div className="p-4 sm:p-6 space-y-3">
+                {[
+                  { name: 'Rushimisha Dieudonne', regNumber: '222013223' },
+                  { name: 'Dusengimana Jean Bosco', regNumber: '222004798' },
+                  { name: 'Usanase Emeline', regNumber: '222008798' },
+                  { name: 'Muneza Joseph', regNumber: '222006232' },
+                  { name: 'Ndizeye Beza Yvan', regNumber: '222002355' },
+                  { name: 'Uwababyeyi Mbabazi Aline', regNumber: '222009293' }
+                ].map((member, index) => (
+                  <motion.div
+                    key={member.regNumber}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    className="flex items-center justify-between p-3 sm:p-4 rounded-lg transition-all hover:scale-[1.02]"
+                    style={{
+                      background: 'var(--bg-secondary)',
+                      border: '1px solid var(--border)'
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-base sm:text-lg font-bold"
+                        style={{
+                          background: 'var(--accent)',
+                          color: 'white'
+                        }}
+                      >
+                        {member.name.split(' ').map(n => n[0]).join('')}
+                      </div>
+                      <div>
+                        <p className="font-semibold text-sm sm:text-base" style={{ color: 'var(--text-primary)' }}>
+                          {member.name}
+                        </p>
+                        <p className="text-xs sm:text-sm" style={{ color: 'var(--text-secondary)' }}>
+                          Reg: {member.regNumber}
+                        </p>
+                      </div>
+                    </div>
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center"
+                      style={{ background: 'var(--success-bg)' }}
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        style={{ color: 'var(--success)' }}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-4 sm:p-6 border-t" style={{ borderColor: 'var(--border)' }}>
+                <button
+                  onClick={() => setShowTeamModal(false)}
+                  className="btn-primary w-full"
+                >
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
